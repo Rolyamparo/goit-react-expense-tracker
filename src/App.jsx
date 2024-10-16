@@ -1,18 +1,22 @@
-import HomePage from "./pages/HomePage";
-import { Route, Routes } from "react-router-dom";
-import SignUpPage from "./pages/SignUpPage";
-import SignInPage from "./pages/SignInPage";
-import DashboardPage from "./pages/DashboardPage";
-import AllExpensePage from "./pages/AllExpensePage";
+import "./App.css";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import WelcomePage from "./pages/WelcomePage";
+import MainTransactions from "./pages/MainTransactionsPage";
 
+import { useAuth } from "./redux/useAuth";
+import { refreshUser } from "./redux/authOperations";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { refreshUser } from "./redux/authOperations";
 
-import RestrictedRoute from "./components/Routes/RestrictedRoute";
-import { PrivateRoute } from "./components/Routes/PrivateRoute";
+import { Routes, Route } from "react-router-dom";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { RestrictedRoute } from "./components/RestrictedRoute";
+import ExpenseList from "./components/ExpenseList";
+import IncomeList from "./components/IncomeList";
+import AddTransaction from "./components/AddTransaction";
 
-const App = () => {
+function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,42 +27,36 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="container mx-auto py-8 lg:px-[100px] md:px-[32px]">
-      <Routes>
-        <Route
-          path="/dashboard"
-          element={<PrivateRoute redirectTo="/" component={DashboardPage} />}
-        />
-        <Route
-          path="/"
-          element={
-            <RestrictedRoute redirectTo="/dashboard" component={HomePage} />
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <RestrictedRoute redirectTo="/dashboard" component={SignUpPage} />
-          }
-        />
-        <Route
-          path="/signin"
-          element={
-            <RestrictedRoute redirectTo="/dashboard" component={SignInPage} />
-          }
-        />
+    <Routes>
+      <Route index element={<WelcomePage />} />
+      <Route
+        path="/register"
+        element={
+          <RestrictedRoute component={RegisterPage} redirectTo="/login" />
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <RestrictedRoute component={LoginPage} redirectTo="/dashboard" />
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={<PrivateRoute component={MainTransactions} redirectTo="/" />}
+      />
 
-        <Route
-          path="/all-expense"
-          element={<PrivateRoute redirectTo="/" component={AllExpensePage} />}
-        />
-        <Route
-          path="/all-income"
-          element={<PrivateRoute redirectTo="/" component={AllExpensePage} />}
-        />
-      </Routes>
-    </div>
+      <Route
+        path="/expenselist"
+        element={<PrivateRoute component={ExpenseList} redirectTo="/" />}
+      />
+
+      <Route
+        path="/incomelist"
+        element={<PrivateRoute component={IncomeList} redirectTo="/" />}
+      />
+    </Routes>
   );
-};
+}
 
 export default App;
