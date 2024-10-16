@@ -1,14 +1,14 @@
 import React from "react";
 import InitialHeader from "../components/Header/Logo";
-import Home from "../components/Home/Home";
+import SignIn from "../components/SignIn/SignIn";
 
-const HomePage = () => {
+const SignInPage = () => {
   return (
     <>
       <InitialHeader />
-      <Home />
+      <SignIn />
     </>
   );
 };
 
-export default HomePage;
+export default SignInPage;
